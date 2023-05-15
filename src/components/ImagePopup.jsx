@@ -1,12 +1,12 @@
 import React from 'react';
 
-const ImagePopup = (props) => {
+const ImagePopup = ({isOpen, onCloseClick, onClose, card}) => {
   return (
-    <div className={`modal modal_type_image" ${props.isOpen ? 'modal_open' : ''}`} onClick={props.onCloseClick}>
+    <div className={`modal modal_type_image" ${isOpen ? 'modal_open' : ''}`} onClick={onCloseClick}>
       <figure className="modal__figure">
-        <button className="modal__close-button link" type="button" title="Закрыть" onClick={props.onClose}></button>
-        <img className="modal__image" src={props.card.link} alt={props.card.name} />
-        <figcaption className="modal__caption">{props.card.name}</figcaption>
+        <button className="modal__close-button link" type="button" title="Закрыть" onClick={onClose}></button>
+        <img className="modal__image" src={card.link} alt={card.name} />
+        <figcaption className="modal__caption">{card.name}</figcaption>
       </figure>
     </div>
   );

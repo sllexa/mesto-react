@@ -44,7 +44,7 @@ function App() {
   }
 
   return (
-    <div className="page">
+    <>
       <Header />
       <Main
         onEditProfile={handleEditProfileClick}
@@ -59,46 +59,36 @@ function App() {
         onCloseClick={handlePopupCloseClick}
         name={'edit-profile'}
         title={'Редактировать профиль'}
-        buttonText={'Сохранить'}
-        children={(
-          <>
-            <input className="modal__input modal__input_type_name" type="text" name="name" id="userName" minlength="2" maxlength="40" placeholder="Имя" required />
+        buttonText={'Сохранить'}>
+            <input className="modal__input modal__input_type_name" type="text" name="name" id="userName" placeholder="Имя" required />
             <span className="modal__input-error" id="userName-error"></span>
-            <input className="modal__input modal__input_type_description" type="text" name="about" id="userjob" minlength="2" maxlength="200" placeholder="О себе" required />
+            <input className="modal__input modal__input_type_description" type="text" name="about" id="userjob" placeholder="О себе" required />
             <span className="modal__input-error" id="userjob-error"></span>
-          </>
-        )}
-      />
+      </PopupWithForm>
+        
       <PopupWithForm
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         onCloseClick={handlePopupCloseClick}
         name={'add-element'}
         title={'Новое место'}
-        buttonText={'Сохранить'}
-        children={(
-          <>
-            <input className="modal__input modal__input_type_place" type="text" name="name" id="element-name" placeholder="Название" minlength="2" maxlength="30" required />
+        buttonText={'Сохранить'}>
+            <input className="modal__input modal__input_type_place" type="text" name="name" id="element-name" placeholder="Название" required />
             <span className="modal__input-error" id="element-name-error"></span>
             <input className="modal__input modal__input_type_link" type="url" name="link" id="link" placeholder="Ссылка на картинку" required />
             <span className="modal__input-error" id="link-error"></span>
-          </>
-        )}
-      />
+      </PopupWithForm>
+
       <PopupWithForm
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
         onCloseClick={handlePopupCloseClick}
         name={'avatar'}
         title={'Обновить аватар'}
-        buttonText={'Сохранить'}
-        children={(
-          <>
+        buttonText={'Сохранить'}>
             <input className="modal__input modal__input_type_avatar" type="url" name="avatar" id="avatar" placeholder="Ссылка на аватар" required />
             <span className="modal__input-error" id="avatar-error"></span>
-          </>
-        )}
-      />
+      </PopupWithForm>
 
       <ImagePopup
         isOpen={isImagePopupOpen}
@@ -107,7 +97,7 @@ function App() {
         onCloseClick={handlePopupCloseClick}
       />
 
-    </div>
+    </>
   );
 }
 

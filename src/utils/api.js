@@ -4,67 +4,64 @@ class Api {
     this._headers = headers;
   }
 
-  _responseServer(res) {
+  _checkResponse(res) {
     return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
   }
 
+  _request(url, options) {
+    return fetch(this._url + url, options).then(this._checkResponse);
+  }
+
   getCards() {
-    return fetch(`${this._url}/cards`, {
-      method: 'GET',
+    return this._request('/cards', {
+      method: 'GET', 
       headers: this._headers
-    })
-      .then(res => this._responseServer(res));
+    });
   }
 
   addCard(card) {
-    return fetch(`${this._url}/cards`, {
-      method: 'POST',
-      headers: this._headers,
-      body: JSON.stringify({name: card.name, link: card.link})
-    })
-      .then(res => this._responseServer(res));
+    return this._request('/cards', { 
+      method: 'POST', 
+      headers: this._headers, 
+      body: JSON.stringify({ name: card.name, link: card.link }) 
+    });
   }
 
   getProfile() {
-    return fetch(`${this._url}/users/me`, {
+    return this._request('/users/me', {
       method: 'GET',
       headers: this._headers
-    })
-    .then(res => this._responseServer(res));
+    });
   }
 
   setProfile(profile) {
-    return fetch(`${this._url}/users/me`, {
+    return this._request('/users/me', {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({ name: profile.name, about: profile.about })
-    })
-    .then(res => this._responseServer(res));
+    });
   }
 
   setAvatar(profile) {
-    return fetch(`${this._url}/users/me/avatar`, {
+    return this._request('/users/me/avatar', {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({ avatar: profile.avatar })
-    })
-    .then(res => this._responseServer(res));
+    });
   }
 
   deleteCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId}`, {
+    return this._request(`/cards/${cardId}`, {
       method: 'DELETE',
-      headers: this._headers
-    })
-    .then(res => this._responseServer(res));
+      headers: this._headers,
+    });
   }
 
   setLikedCard(cardId, method) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
+    return this._request(`/cards/${cardId}/likes`, {
       method: method,
-      headers: this._headers
-    })
-    .then(res => this._responseServer(res));
+      headers: this._headers,
+    });
   }
 }
 
