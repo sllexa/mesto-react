@@ -19,11 +19,11 @@ class Api {
     });
   }
 
-  addCard(card) {
+  addCard(name, link) {
     return this._request('/cards', { 
       method: 'POST', 
       headers: this._headers, 
-      body: JSON.stringify({ name: card.name, link: card.link }) 
+      body: JSON.stringify({ name: name, link: link }) 
     });
   }
 
@@ -34,19 +34,19 @@ class Api {
     });
   }
 
-  setProfile(profile) {
+  setProfile(name, about) {
     return this._request('/users/me', {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({ name: profile.name, about: profile.about })
+      body: JSON.stringify({ name: name, about: about })
     });
   }
 
-  setAvatar(profile) {
+  setAvatar(avatar) {
     return this._request('/users/me/avatar', {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({ avatar: profile.avatar })
+      body: JSON.stringify({ avatar: avatar })
     });
   }
 
