@@ -3,7 +3,7 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
 import useFormValidation from '../hooks/useFormValidation';
 
-const EditProfilePopup = ({ isOpen, onClose, onCloseClick, onUpdateUser }) => {
+const EditProfilePopup = ({ isOpen, onClose, onEditProfile }) => {
   const currentUser = React.useContext(CurrentUserContext);
   const { values, errors, isValid, handleChange, resetForm } = useFormValidation();
 
@@ -16,14 +16,13 @@ const EditProfilePopup = ({ isOpen, onClose, onCloseClick, onUpdateUser }) => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    onUpdateUser(values.name, values.about);
+    onEditProfile(values.name, values.about);
   }
 
   return (
     <PopupWithForm
       isOpen={isOpen}
       onClose={onClose}
-      onCloseClick={onCloseClick}
       title={'Редактировать профиль'}
       name={'edit-profile'}
       buttonText={'Сохранить'}

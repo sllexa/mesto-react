@@ -29,10 +29,11 @@ function App() {
       .then(([profile, listCards]) => {
         setCurrentUser(profile);
         setCards(listCards);
-      }).catch(error => console.log(error))
+      }).catch(console.error)
       .finally(() => setIsLoading(false));
   }, [])
 
+  
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   }
@@ -55,12 +56,6 @@ function App() {
     setIsDeletePopupOpen(true);
   }
 
-  const handlePopupCloseClick = (evt) => {
-    if (evt.target.classList.contains('modal')) {
-      closeAllPopups();
-    }
-  }
-
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
@@ -71,53 +66,48 @@ function App() {
   }
 
   const handleCardLike = (card) => {
-    setIsLoading(true);
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    const method = isLiked ? 'DELETE' : 'PUT';
+    function makeRequest() {
+      const isLiked = card.likes.some(i => i._id === currentUser._id);
+      const method = isLiked ? 'DELETE' : 'PUT';
 
-    api.setLikedCard(card._id, method)
-      .then(newCard => {
-        setCards(state => state.map(c => c._id === card._id ? newCard : c));
-      }).catch(error => console.log(error))
-      .finally(() => setIsLoading(false));
+      return api.setLikedCard(card._id, method).then(res => setCards(state => state.map(c => c._id === card._id ? res : c)));
+    }
+    handleSubmit(makeRequest);
   }
 
   const handleCardDelete = () => {
-    setIsLoading(true);
-    api.deleteCard(cardDelete._id)
-      .then(() =>{
-        setCards(array => array.filter(c => c._id !== cardDelete._id));
-      }).catch(error => console.log(error))
-      .finally(() => setIsLoading(false));
+    function makeRequest() {
+      return api.deleteCard(cardDelete._id).then(setCards(array => array.filter(c => c._id !== cardDelete._id)));
+    }
+    handleSubmit(makeRequest);
   }
 
-  const handleUpdateUser = (name, about) => {
-    setIsLoading(true);
-    api.setProfile(name, about)
-      .then(user => {
-        setCurrentUser(user);
-        closeAllPopups();
-      }).catch(error => console.log(error))
-      .finally(() => setIsLoading(false));
+  const handleProfileFormSubmit = (name, about) => {
+    function makeRequest() {
+      return api.setProfile(name, about).then(setCurrentUser);
+    }
+    handleSubmit(makeRequest);
   }
 
   const handleUpdateAvatar = (avatar) => {
-    setIsLoading(true);
-    api.setAvatar(avatar)
-      .then(res => {
-        setCurrentUser(res);
-        closeAllPopups();
-      }).catch(error => console.log(error))
-      .finally(() => setIsLoading(false));
+    function makeRequest() {
+      return api.setAvatar(avatar).then(setCurrentUser);
+    }
+    handleSubmit(makeRequest);
   }
 
   const handleAddPlaceSubmit = (name, link) => {
+    function makeRequest() {
+      return api.addCard(name, link).then(res => setCards([res, ...cards]));
+    }
+    handleSubmit(makeRequest);
+  }
+
+  const handleSubmit = (request) => {
     setIsLoading(true);
-    api.addCard(name, link)
-      .then(res => {
-        setCards([res, ...cards]);
-        closeAllPopups();
-      }).catch(error => console.log(error))
+    request()
+      .then(closeAllPopups)
+      .catch(console.error)
       .finally(() => setIsLoading(false));
   }
 
@@ -135,24 +125,21 @@ function App() {
       />
       <Footer />
       <Loader isOpen={isLoading} />
-      <EditProfilePopup 
+      <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
-        onCloseClick={handlePopupCloseClick}
-        onUpdateUser={handleUpdateUser}
+        onEditProfile={handleProfileFormSubmit}
       />
 
-      <EditAvatarPopup 
+      <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
-        onCloseClick={handlePopupCloseClick}
         onUpdateAvatar={handleUpdateAvatar}
       />
 
-      <AddPlacePopup 
+      <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
-        onCloseClick={handlePopupCloseClick}
         onAddPlace={handleAddPlaceSubmit}
       />
 
@@ -160,13 +147,11 @@ function App() {
         isOpen={isImagePopupOpen}
         card={selectedCard}
         onClose={closeAllPopups}
-        onCloseClick={handlePopupCloseClick}
       />
 
-      <ConfirmCardDeletePopup 
+      <ConfirmCardDeletePopup
         isOpen={isDeletePopupOpen}
         onClose={closeAllPopups}
-        onCloseClick={handlePopupCloseClick}
         onCardDelete={handleCardDelete}
       />
 

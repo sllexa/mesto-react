@@ -2,7 +2,7 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import useFormValidation from '../hooks/useFormValidation';
 
-const EditAvatarPopup = ({ isOpen, onClose, onCloseClick, onUpdateAvatar }) => {
+const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
   const { values, errors, isValid, handleChange, resetForm } = useFormValidation();
 
   function handleSubmit(e) {
@@ -19,7 +19,6 @@ const EditAvatarPopup = ({ isOpen, onClose, onCloseClick, onUpdateAvatar }) => {
     <PopupWithForm
       isOpen={isOpen}
       onClose={onClose}
-      onCloseClick={onCloseClick}
       name={'avatar'}
       title={'Обновить аватар'}
       buttonText={'Сохранить'}
